@@ -1,0 +1,192 @@
+{load_file("nrngui.hoc")}
+objectvar save_window_, rvp_
+objectvar scene_vector_[8]
+objectvar ocbox_, ocbox_list_, scene_, scene_list_
+{ocbox_list_ = new List()  scene_list_ = new List()}
+{pwman_place(0,0,0)}
+
+//Begin I/V Clamp Electrode
+{
+load_file("electrod.hoc")
+}
+{
+ocbox_=new Electrode(0)
+execute("can_locate=1 sec=\"soma\" xloc=0.5 locate(0)", ocbox_)
+execute("vc.dur[0]=50 vc.amp[0]=-60", ocbox_)
+execute("vc.dur[1]=250 vc.amp[1]=-30", ocbox_)
+execute("vc.dur[2]=250 vc.amp[2]=-60", ocbox_)
+execute("stim.del=0.1 stim.dur=0.1 stim.amp=0", ocbox_)
+execute("vcsteps=16", ocbox_)
+execute("samp=stim.amp  store_vclamp() glyph()", ocbox_)
+ocbox_ = ocbox_.v1
+ocbox_.map("I/V Clamp Electrode", 488, 88, 360, 747)
+}
+objref ocbox_
+//End I/V Clamp Electrode
+
+{
+xpanel("RunControl", 0)
+v_init = -73
+xvalue("Init","v_init", 1,"stdinit()", 1, 1 )
+xbutton("Init & Run","run()")
+xbutton("Stop","stoprun=1")
+runStopAt = 5
+xvalue("Continue til","runStopAt", 1,"{continuerun(runStopAt) stoprun=1}", 1, 1 )
+runStopIn = 1
+xvalue("Continue for","runStopIn", 1,"{continuerun(t + runStopIn) stoprun=1}", 1, 1 )
+xbutton("Single Step","steprun()")
+t = 401.976
+xvalue("t","t", 2 )
+tstop = 390
+xvalue("Tstop","tstop", 1,"tstop_changed()", 0, 1 )
+dt = 6.16135
+xvalue("dt","dt", 1,"setdt()", 0, 1 )
+steps_per_ms = 40
+xvalue("Points plotted/ms","steps_per_ms", 1,"setdt()", 0, 1 )
+screen_update_invl = 0.05
+xvalue("Scrn update invl","screen_update_invl", 1,"", 0, 1 )
+realtime = 6.92
+xvalue("Real Time","realtime", 0,"", 0, 1 )
+xpanel(1399,20)
+}
+{
+xpanel("Channel Parameters", 0)
+xlabel("Channel Parameters")
+soma.g_pas(0.5) = 0.0001
+xvalue("g_pas","soma.g_pas(0.5)", 1,"soma.g_pas(0.5)", 0, 0 )
+soma.gbar_nattxs(0.5) = 0.009
+xvalue("gbar_nattxs","soma.gbar_nattxs(0.5)", 1,"soma.gbar_nattxs(0.5)", 0, 0 )
+soma.gbar_nav1p8(0.5) = 0.004
+xvalue("gbar_nav1p8","soma.gbar_nav1p8(0.5)", 1,"soma.gbar_nav1p8(0.5)", 0, 0 )
+soma.gbar_nav1p9(0.5) = 0
+xvalue("gbar_nav1p9","soma.gbar_nav1p9(0.5)", 1,"soma.gbar_nav1p9(0.5)", 0, 0 )
+soma.gnabar_nav17(0.5) = 0.00023
+xvalue("gnabar_nav17","soma.gnabar_nav17(0.5)", 1,"soma.gnabar_nav17(0.5)", 0, 0 )
+soma.gkbar_Kv14(0.5) = 0.008
+xvalue("gkbar_Kv14","soma.gkbar_Kv14(0.5)", 1,"soma.gkbar_Kv14(0.5)", 0, 0 )
+soma.gkbar_Kv14s(0.5) = 0
+xvalue("gkbar_Kv14s","soma.gkbar_Kv14s(0.5)", 1,"soma.gkbar_Kv14s(0.5)", 0, 0 )
+soma.gkbar_Kv34(0.5) = 0
+xvalue("gkbar_Kv34","soma.gkbar_Kv34(0.5)", 1,"soma.gkbar_Kv34(0.5)", 0, 0 )
+soma.gkbar_Kv4_3m(0.5) = 0
+xvalue("gkbar_Kv4_3m","soma.gkbar_Kv4_3m(0.5)", 1,"soma.gkbar_Kv4_3m(0.5)", 0, 0 )
+soma.gkbar_GRC_KIR(0.5) = 0
+xvalue("gkbar_GRC_KIR","soma.gkbar_GRC_KIR(0.5)", 1,"soma.gkbar_GRC_KIR(0.5)", 0, 0 )
+soma.gbar_Kv1(0.5) = 9.6e-005
+xvalue("gbar_Kv1","soma.gbar_Kv1(0.5)", 1,"soma.gbar_Kv1(0.5)", 0, 0 )
+soma.gbar_Kv3(0.5) = 0
+xvalue("gbar_Kv3","soma.gbar_Kv3(0.5)", 1,"soma.gbar_Kv3(0.5)", 0, 0 )
+soma.gbar_Kv4(0.5) = 0
+xvalue("gbar_Kv4","soma.gbar_Kv4(0.5)", 1,"soma.gbar_Kv4(0.5)", 0, 0 )
+soma.gmax_Kv4s(0.5) = 0
+xvalue("gmax_Kv4s","soma.gmax_Kv4s(0.5)", 1,"soma.gmax_Kv4s(0.5)", 0, 0 )
+soma.gmax_Kv4f(0.5) = 0
+xvalue("gmax_Kv4f","soma.gmax_Kv4f(0.5)", 1,"gmax_Kv4f(0.5)", 0, 0 )
+soma.gmax_KCNQ(0.5) = 0.0006
+xvalue("gmax_KCNQ","soma.gmax_KCNQ(0.5)", 1,"gmax_KCNQ(0.5)", 0, 0 )
+soma.gbar_kdr(0.5) = 0
+xvalue("gbar_kdr","soma.gbar_kdr(0.5)", 1,"soma.gbar_kdr(0.5)", 0, 0 )
+soma.gbarfast_HcnKov(0.5) = 1.352e-005
+xvalue("gbarfast_HcnKov","soma.gbarfast_HcnKov(0.5)", 1,"soma.gbarfast_HcnKov(0.5)", 0, 0 )
+soma.gbarslow_HcnKov(0.5) = 6.7615e-006
+xvalue("gbarslow_HcnKov","soma.gbarslow_HcnKov(0.5)", 1,"soma.gbarslow_HcnKov(0.5)", 0, 0 )
+soma.gbar_Kv7(0.5) = 0
+xvalue("gbar_Kv7","soma.gbar_Kv7(0.5)", 1,"soma.gbar_Kv7(0.5)", 0, 0 )
+soma.gbar_kmtype(0.5) = 0
+xvalue("gbar_kmtype","soma.gbar_kmtype(0.5)", 1,"soma.gbar_kmtype(0.5)", 0, 0 )
+soma.gmax_hh1(0.5) = 0.005
+xvalue("gmax_hh1","soma.gmax_hh1(0.5)", 1,"soma.gmax_hh1(0.5)", 0, 0 )
+xpanel(944,38)
+}
+{
+save_window_ = new Graph(0)
+save_window_.size(-10,300,-0.01,0.3)
+scene_vector_[3] = save_window_
+{save_window_.view(-10, -0.01, 310, 0.31, 1862, 34, 714.6, 577)}
+graphList[1].append(save_window_)
+save_window_.save_name("graphList[1].")
+save_window_.addexpr("soma.iCa_hh1( 0.5 )", 3, 1, 0.772337, 0.757145, 2)
+save_window_.addexpr("soma.ik_Kv34( 0.5 )", 5, 1, 0.780647, 0.373638, 2)
+save_window_.addexpr("soma.ik_Kv4_3m( 0.5 )", 5, 1, 0.75385, 0.856533, 2)
+save_window_.addexpr("soma.ik_Kv1( 0.5 )", 6, 1, 0.769047, 0.205286, 2)
+save_window_.addexpr("soma.ik_Kv3( 0.5 )", 7, 1, 0.769996, 0.869836, 2)
+save_window_.addexpr("soma.ik_GRC_KIR( 0.5 )", 5, 1, 0.783927, 0.575588, 2)
+save_window_.addexpr("soma.ik_Kv4( 0.5 )", 4, 1, 0.808418, 0.508916, 2)
+save_window_.addexpr("soma.ik_Kv4f( 0.5 )", 5, 1, 0.76874, 0.367201, 2)
+save_window_.addexpr("soma.ik_Kv4s( 0.5 )", 4, 1, 0.735544, 0.413309, 2)
+save_window_.addexpr("soma.ik_kdr( 0.5 )", 1, 1, 0.800735, 0.612101, 2)
+save_window_.addexpr("soma.ik_KCNQ( 0.5 )", 1, 1, 0.765471, 0.946066, 2)
+save_window_.addexpr("soma.ina_nav1p8( 0.5 )", 7, 1, 0.728129, 1.34976, 2)
+save_window_.addexpr("soma.ina_nav1p9( 0.5 )", 1, 1, 0.764018, 0.535508, 2)
+save_window_.addexpr("soma.ih_HcnKov( 0.5 )", 6, 0, 0.799018, 0.371403, 2)
+save_window_.addvar("soma.ik_Kv7( 0.5 )", 2, 1, 0.783133, 0.62937, 2)
+save_window_.addvar("soma.ik_kmtype( 0.5 )", 2, 1, 0.775263, 0.893014, 2)
+save_window_.addvar("soma.ik_Kv14( 0.5 )", 2, 1, 0.769296, 1.19117, 2)
+save_window_.addvar("soma.ik_Kv14s( 0.5 )", 3, 1, 0.784492, 0.878861, 2)
+save_window_.addvar("soma.ina_nattxs( 0.5 )", 6, 1, 0.733883, 1.54479, 2)
+save_window_.addvar("soma.ina_nav17( 0.5 )", 3, 1, 0.739002, 1.53841, 2)
+}
+{
+save_window_ = new Graph(0)
+save_window_.size(-10,410,-0.01,0.12)
+scene_vector_[4] = save_window_
+{save_window_.view(-10, -0.01, 420, 0.13, 144, 553, 501.3, 266.5)}
+graphList[1].append(save_window_)
+save_window_.save_name("graphList[1].")
+save_window_.addvar("soma.ik_Kv14( 0.5 )", 3, 1, 0.8, 0.9, 2)
+save_window_.addvar("soma.ik_kdr( 0.5 )", 2, 1, 0.8, 0.9, 2)
+save_window_.addvar("soma.ih_HcnKov( 0.5 )", 7, 1, 0.8, 0.9, 2)
+save_window_.addvar("soma.ik_Kv34( 0.5 )", 4, 1, 0.8, 0.9, 2)
+save_window_.addvar("soma.ik_kmtype( 0.5 )", 6, 1, 0.8, 0.9, 2)
+}
+{
+save_window_ = new Graph(0)
+save_window_.size(-10,410,-0.006,0.05)
+scene_vector_[5] = save_window_
+{save_window_.view(-10, -0.006, 420, 0.056, 0, 562, 472.5, 259.3)}
+graphList[1].append(save_window_)
+save_window_.save_name("graphList[1].")
+save_window_.addvar("soma.ina_nattxs( 0.5 )", 2, 1, 0.626648, 0.913923, 2)
+save_window_.addvar("soma.ina_nav1p8( 0.5 )", 3, 1, 0.662464, 0.9, 2)
+save_window_.addvar("soma.ina_nav1p9( 0.5 )", 7, 1, 0.663897, 0.877723, 2)
+}
+{
+save_window_ = new Graph(0)
+save_window_.size(-10,410,-0.01,0.35)
+scene_vector_[6] = save_window_
+{save_window_.view(-10, -0.01, 420, 0.36, 285, 536, 388.8, 278.2)}
+graphList[1].append(save_window_)
+save_window_.save_name("graphList[1].")
+save_window_.addvar("soma.i_pas( 0.5 )", 2, 0, 0.8, 0.9, 2)
+save_window_.addvar("soma.ih( 0.5 )", 3, 0, 0.8, 0.9, 2)
+save_window_.addvar("soma.ik( 0.5 )", 4, 0, 0.8, 0.9, 2)
+save_window_.addvar("soma.ina( 0.5 )", 6, 0, 0.8, 0.9, 2)
+}
+{
+save_window_ = new Graph(0)
+save_window_.size(-10,430,-0.6,3.5)
+scene_vector_[7] = save_window_
+{save_window_.view(-10, -0.6, 440, 4.1, 2804, 33, 648.9, 582.4)}
+graphList[1].append(save_window_)
+save_window_.save_name("graphList[1].")
+save_window_.addexpr("(soma.ik( 0.5 )+soma.ina(0.5)+soma.ih(0.5)+soma.i_pas(0.5)+soma.iCa(0.5))*area(0.5)*0.01", 3, 1, 0.439351, 0.995705, 2)
+}
+
+//Begin VariableTimeStep
+{
+ocbox_ = NumericalMethodPanel[0]
+}
+{object_push(ocbox_)}
+{
+atol_ = 0.001  CVode[0].atol(atol_)
+restore(301, 1)
+}
+{object_pop()}
+{
+ocbox_.map("VariableTimeStep", 1431, 612, 458.1, 657.9)
+}
+objref ocbox_
+//End VariableTimeStep
+
+objectvar scene_vector_[1]
+{doNotify()}

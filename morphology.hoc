@@ -1,0 +1,100 @@
+
+load_file("nrngui.hoc")
+
+nrncontrolmenu()
+
+v_init = -73
+tstop = 2000
+celsius = 22 
+
+create soma
+soma{
+	L = 20.7
+	diam = 20.7
+	nseg = 1
+	cm = 18/(3.14* diam^2 )* 100 
+	Ra = 100 
+}
+
+
+create tstem
+tstem{
+	diam = 1.4
+	L 	 = 75
+	Ra	 = 100
+	cm   = 1		
+	nseg = int((L /(0.1*lambda_f(100))+0.9)/2)*2 + 1    
+}
+
+create paxon, caxon
+
+connect soma(0), tstem(1)
+connect tstem(0), paxon(1)
+
+connect caxon(1),paxon(1)
+
+paxon.diam = 0.8
+caxon.diam = 0.4  
+
+forsec "axon" {
+	L = 5000
+	Ra = 100
+	cm = 1	
+	nseg = int((L/(0.1*lambda_f(100))+0.9)/2)*2 + 1 
+	
+}
+
+
+forall{
+	//Passive Channel
+	insert pas
+	g_pas = 0.0001
+	e_pas = -73
+	
+	//Na Channels
+	insert nattxs
+	insert nav1p8
+	insert nav1p9
+	insert nav17
+	
+	// K+ Currents
+	insert Kv1
+	insert Kv3
+	insert Kv14
+	insert Kv14s
+	insert Kv34
+	insert Kv4
+	insert kmtype
+	insert Kv4s
+	insert Kv4f
+	insert kdr 
+	insert KCNQ
+	insert GRC_KIR
+	insert hh1
+	insert Kv4_3m
+
+
+insert HcnKov 
+	eh = -30
+	insert Kv7
+gbar_nattxs	= 9e-005
+gbar_nav1p8	= 0.00008
+gbar_nav1p9	= 0.000048
+gnabar_nav17 = 0.00023
+gbar_Kv1 = 0.004
+gbar_Kv3 = 0.004
+gbar_Kv4 = 0.0039
+gkbar_Kv14	= 2e-005
+gkbar_Kv14s	= 2e-005
+gkbar_Kv34	= 0.00001
+gbar_kdr	= 8e-005 
+gbarfast_HcnKov  = 1.352e-5 
+gbarslow_HcnKov  = 6.7615e-06
+gbar_Kv7= 0.0003
+gbar_kmtype = 0.0001
+gmax_Kv4s = 0.0001
+gmax_Kv4f = 0.0001
+gmax_KCNQ = 0.0001
+gmax_hh1 = 0.001
+}
+
